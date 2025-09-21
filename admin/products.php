@@ -10,7 +10,7 @@ include '../db/config.php';
 
 // Initialize variables
 $search = isset($_GET['search']) ? $_GET['search'] : '';
-$page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+$page = isset($_GET['page']) ? (int) $_GET['page'] : 1;
 $limit = 10;
 $offset = ($page - 1) * $limit;
 
@@ -161,7 +161,7 @@ $stmt->close();
             font-size: 1.8rem;
             font-weight: bold;
         }
-        
+
         .table-container {
             background: white;
             border-radius: 10px;
@@ -169,16 +169,16 @@ $stmt->close();
             padding: 20px;
             margin-bottom: 20px;
         }
-        
+
         .action-buttons .btn {
             padding: 0.25rem 0.5rem;
             font-size: 0.875rem;
         }
-        
+
         .search-form {
             max-width: 400px;
         }
-        
+
         .pagination-container {
             display: flex;
             justify-content: space-between;
@@ -198,7 +198,7 @@ $stmt->close();
             .sidebar.active {
                 margin-left: 0;
             }
-            
+
             .pagination-container {
                 flex-direction: column;
                 gap: 10px;
@@ -222,6 +222,7 @@ $stmt->close();
                             <i class="bi bi-speedometer2"></i> Dashboard
                         </a>
                     </li>
+
                     <!-- Product -->
                     <li class="nav-item">
                         <a class="nav-link" data-bs-toggle="collapse" href="#productsSubmenu" role="button"
@@ -265,6 +266,29 @@ $stmt->close();
                             </ul>
                         </div>
                     </li>
+
+                    <!-- Suppliers -->
+                    <li class="nav-item">
+                        <a class="nav-link" data-bs-toggle="collapse" href="#suppliersSubmenu" role="button"
+                            aria-expanded="false">
+                            <i class="bi bi-building"></i> Suppliers <i class="bi bi-chevron-down ms-auto"></i>
+                        </a>
+                        <div class="collapse" id="suppliersSubmenu">
+                            <ul class="nav flex-column ms-3">
+                                <li class="nav-item">
+                                    <a class="nav-link" href="suppliers.php">
+                                        <i class="bi bi-box-fill"></i> Suppliers
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link active" href="add_supplier.php">
+                                        <i class="bi bi-plus-circle-fill"></i> Add Supplier
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+
 
                     <!-- Orders -->
                     <li class="nav-item">
@@ -338,7 +362,7 @@ $stmt->close();
                         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                     </div>
                 <?php endif; ?>
-                
+
                 <?php if (isset($error_msg)): ?>
                     <div class="alert alert-danger alert-dismissible fade show" role="alert">
                         <?= $error_msg ?>
@@ -350,7 +374,8 @@ $stmt->close();
                 <div class="table-container">
                     <form method="GET" action="products.php" class="mb-4">
                         <div class="input-group search-form">
-                            <input type="text" class="form-control" placeholder="Search products..." name="search" value="<?= htmlspecialchars($search) ?>">
+                            <input type="text" class="form-control" placeholder="Search products..." name="search"
+                                value="<?= htmlspecialchars($search) ?>">
                             <button class="btn btn-outline-primary" type="submit">
                                 <i class="bi bi-search"></i> Search
                             </button>
@@ -386,7 +411,8 @@ $stmt->close();
                                             <td><?= htmlspecialchars($product['category']) ?></td>
                                             <td>$<?= number_format($product['price'], 2) ?></td>
                                             <td>
-                                                <span class="<?= $product['stock_quantity'] < $product['min_stock_level'] ? 'text-danger fw-bold' : '' ?>">
+                                                <span
+                                                    class="<?= $product['stock_quantity'] < $product['min_stock_level'] ? 'text-danger fw-bold' : '' ?>">
                                                     <?= $product['stock_quantity'] ?>
                                                 </span>
                                             </td>
@@ -397,16 +423,17 @@ $stmt->close();
                                                 </span>
                                             </td>
                                             <td class="action-buttons">
-                                                <a href="view_product.php?id=<?= $product['product_id'] ?>" class="btn btn-sm btn-info" title="View">
+                                                <a href="view_product.php?id=<?= $product['product_id'] ?>"
+                                                    class="btn btn-sm btn-info" title="View">
                                                     <i class="bi bi-eye"></i>
                                                 </a>
-                                                <a href="edit_product.php?id=<?= $product['product_id'] ?>" class="btn btn-sm btn-warning" title="Edit">
+                                                <a href="edit_product.php?id=<?= $product['product_id'] ?>"
+                                                    class="btn btn-sm btn-warning" title="Edit">
                                                     <i class="bi bi-pencil"></i>
                                                 </a>
-                                                <a href="products.php?delete_id=<?= $product['product_id'] ?>" 
-                                                   class="btn btn-sm btn-danger" 
-                                                   title="Delete"
-                                                   onclick="return confirm('Are you sure you want to delete this product?')">
+                                                <a href="products.php?delete_id=<?= $product['product_id'] ?>"
+                                                    class="btn btn-sm btn-danger" title="Delete"
+                                                    onclick="return confirm('Are you sure you want to delete this product?')">
                                                     <i class="bi bi-trash"></i>
                                                 </a>
                                             </td>
@@ -431,7 +458,8 @@ $stmt->close();
                                 <ul class="pagination">
                                     <?php if ($page > 1): ?>
                                         <li class="page-item">
-                                            <a class="page-link" href="products.php?page=<?= $page - 1 ?><?= !empty($search) ? '&search=' . urlencode($search) : '' ?>">
+                                            <a class="page-link"
+                                                href="products.php?page=<?= $page - 1 ?><?= !empty($search) ? '&search=' . urlencode($search) : '' ?>">
                                                 Previous
                                             </a>
                                         </li>
@@ -443,7 +471,8 @@ $stmt->close();
 
                                     <?php if ($page < $total_pages): ?>
                                         <li class="page-item">
-                                            <a class="page-link" href="products.php?page=<?= $page + 1 ?><?= !empty($search) ? '&search=' . urlencode($search) : '' ?>">
+                                            <a class="page-link"
+                                                href="products.php?page=<?= $page + 1 ?><?= !empty($search) ? '&search=' . urlencode($search) : '' ?>">
                                                 Next
                                             </a>
                                         </li>

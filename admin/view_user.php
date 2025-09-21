@@ -193,6 +193,29 @@ $stmt->close();
                         </div>
                     </li>
 
+                    <!-- Suppliers -->
+                    <li class="nav-item">
+                        <a class="nav-link" data-bs-toggle="collapse" href="#suppliersSubmenu" role="button"
+                            aria-expanded="false">
+                            <i class="bi bi-building"></i> Suppliers <i class="bi bi-chevron-down ms-auto"></i>
+                        </a>
+                        <div class="collapse" id="suppliersSubmenu">
+                            <ul class="nav flex-column ms-3">
+                                <li class="nav-item">
+                                    <a class="nav-link" href="suppliers.php">
+                                        <i class="bi bi-box-fill"></i> Suppliers
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link active" href="add_supplier.php">
+                                        <i class="bi bi-plus-circle-fill"></i> Add Supplier
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+
+
                     <!-- Orders -->
                     <li class="nav-item">
                         <a class="nav-link" href="orders.php">
