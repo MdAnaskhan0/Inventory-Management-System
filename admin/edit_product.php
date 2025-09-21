@@ -6,7 +6,7 @@ if (!isset($_SESSION['username']) || $_SESSION['role'] !== 'admin') {
 }
 
 // Include database configuration
-include '../config.php';
+include '../db/config.php';
 
 // Initialize variables
 $product_id = $name = $description = $category = $price = $cost_price = $stock_quantity = $min_stock_level = $sku = $barcode = $supplier_id = $image_url = $weight = $dimensions = "";
@@ -274,12 +274,29 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         </div>
                     </li>
 
-                    <!-- Users -->
+                   <!-- Users -->
                     <li class="nav-item">
-                        <a class="nav-link" href="users.php">
-                            <i class="bi bi-people"></i> Users
+                        <a class="nav-link" data-bs-toggle="collapse" href="#usersSubmenu" role="button"
+                            aria-expanded="false">
+                            <i class="bi bi-people"></i> Users <i class="bi bi-chevron-down ms-auto"></i>
                         </a>
+                        <div class="collapse" id="usersSubmenu">
+                            <ul class="nav flex-column ms-3">
+                                <li class="nav-item">
+                                    <a class="nav-link" href="users.php">
+                                        <i class="bi bi-people-fill"></i> View Users
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link active" href="add_user.php">
+                                        <i class="bi bi-person-fill-add"></i> Add Users
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
                     </li>
+
+                    <!-- Orders -->
                     <li class="nav-item">
                         <a class="nav-link" href="orders.php">
                             <i class="bi bi-cart-check"></i> Orders

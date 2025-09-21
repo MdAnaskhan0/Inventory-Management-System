@@ -6,7 +6,7 @@ if (!isset($_SESSION['username']) || $_SESSION['role'] !== 'admin') {
 }
 
 // Include database configuration
-include '../config.php';
+include '../db/config.php';
 
 // Get stats for dashboard
 $users_count = 0;

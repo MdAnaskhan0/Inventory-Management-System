@@ -8,25 +8,51 @@ if (!isset($_SESSION['username']) || $_SESSION['role'] !== 'admin') {
 // Include database configuration
 include '../db/config.php';
 
-// Handle user deletion
-if (isset($_GET['delete_id'])) {
-    $delete_id = $_GET['delete_id'];
-    $stmt = $conn->prepare("DELETE FROM users WHERE id = ?");
-    $stmt->bind_param("i", $delete_id);
-    if ($stmt->execute()) {
-        $success_msg = "User deleted successfully!";
-    } else {
-        $error_msg = "Error deleting user: " . $conn->error;
-    }
-    $stmt->close();
-}
+$error_msg = '';
+$success_msg = '';
 
-// Fetch all users
-$users = [];
-$result = $conn->query("SELECT * FROM users ORDER BY created_at DESC");
-if ($result && $result->num_rows > 0) {
-    while ($row = $result->fetch_assoc()) {
-        $users[] = $row;
+// Handle form submission
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $username = trim($_POST['username']);
+    $email = trim($_POST['email']);
+    $password = $_POST['password'];
+    $confirm_password = $_POST['confirm_password'];
+    $role = $_POST['role'];
+
+    // Validate inputs
+    if (empty($username) || empty($email) || empty($password) || empty($confirm_password)) {
+        $error_msg = "All fields are required.";
+    } elseif ($password !== $confirm_password) {
+        $error_msg = "Passwords do not match.";
+    } elseif (strlen($password) < 6) {
+        $error_msg = "Password must be at least 6 characters long.";
+    } else {
+        // Check if username or email already exists
+        $check_stmt = $conn->prepare("SELECT id FROM users WHERE username = ? OR email = ?");
+        $check_stmt->bind_param("ss", $username, $email);
+        $check_stmt->execute();
+        $check_result = $check_stmt->get_result();
+
+        if ($check_result->num_rows > 0) {
+            $error_msg = "Username or email already exists.";
+        } else {
+            // Hash password and insert user
+            $hashed_password = password_hash($password, PASSWORD_DEFAULT);
+            $insert_stmt = $conn->prepare("INSERT INTO users (username, email, password, role) VALUES (?, ?, ?, ?)");
+            $insert_stmt->bind_param("ssss", $username, $email, $hashed_password, $role);
+
+            if ($insert_stmt->execute()) {
+                $success_msg = "User added successfully!";
+                // Clear form fields
+                $_POST = array();
+            } else {
+                $error_msg = "Error adding user: " . $conn->error;
+            }
+
+            $insert_stmt->close();
+        }
+
+        $check_stmt->close();
     }
 }
 ?>
@@ -37,10 +63,11 @@ if ($result && $result->num_rows > 0) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Manage Users - Inventory Management System</title>
+    <title>Add User - Inventory Management System</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
     <style>
+        /* Same styles as users.php */
         :root {
             --primary: #0d6efd;
             --secondary: #6c757d;
@@ -97,11 +124,6 @@ if ($result && $result->num_rows > 0) {
             transition: transform 0.3s;
         }
 
-        .card-icon {
-            font-size: 2.5rem;
-            opacity: 0.8;
-        }
-
         .navbar-custom {
             background: white;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
@@ -110,11 +132,6 @@ if ($result && $result->num_rows > 0) {
         .welcome-text {
             font-weight: 500;
             color: var(--dark);
-        }
-
-        .stats-number {
-            font-size: 1.8rem;
-            font-weight: bold;
         }
 
         @media (max-width: 768px) {
@@ -129,11 +146,6 @@ if ($result && $result->num_rows > 0) {
             .sidebar.active {
                 margin-left: 0;
             }
-        }
-
-        .action-buttons .btn {
-            padding: 0.25rem 0.5rem;
-            font-size: 0.875rem;
         }
     </style>
 </head>
@@ -153,7 +165,6 @@ if ($result && $result->num_rows > 0) {
                             <i class="bi bi-speedometer2"></i> Dashboard
                         </a>
                     </li>
-                    
                     <!-- Product -->
                     <li class="nav-item">
                         <a class="nav-link" data-bs-toggle="collapse" href="#productsSubmenu" role="button"
@@ -255,87 +266,69 @@ if ($result && $result->num_rows > 0) {
                     </div>
                 </nav>
 
-                <!-- Users Management -->
+                <!-- Add User Form -->
                 <div class="row mb-4">
                     <div class="col-12">
                         <div class="d-flex justify-content-between align-items-center">
-                            <h2>User Management</h2>
-                            <a href="add_user.php" class="btn btn-primary">
-                                <i class="bi bi-plus-circle"></i> Add New User
+                            <h2>Add New User</h2>
+                            <a href="users.php" class="btn btn-secondary">
+                                <i class="bi bi-arrow-left"></i> Back to Users
                             </a>
                         </div>
                     </div>
                 </div>
 
                 <!-- Alert Messages -->
-                <?php if (isset($success_msg)): ?>
-                    <div class="alert alert-success alert-dismissible fade show" role="alert">
-                        <?= $success_msg ?>
-                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                    </div>
-                <?php endif; ?>
-
-                <?php if (isset($error_msg)): ?>
+                <?php if (!empty($error_msg)): ?>
                     <div class="alert alert-danger alert-dismissible fade show" role="alert">
                         <?= $error_msg ?>
                         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                     </div>
                 <?php endif; ?>
 
-                <!-- Users Table -->
+                <?php if (!empty($success_msg)): ?>
+                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                        <?= $success_msg ?>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                <?php endif; ?>
+
                 <div class="card dashboard-card">
                     <div class="card-body">
-                        <div class="table-responsive">
-                            <table class="table table-hover">
-                                <thead>
-                                    <tr>
-                                        <th>ID</th>
-                                        <th>Username</th>
-                                        <th>Email</th>
-                                        <th>Role</th>
-                                        <th>Created At</th>
-                                        <th>Actions</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <?php if (count($users) > 0): ?>
-                                        <?php foreach ($users as $user): ?>
-                                            <tr>
-                                                <td><?= $user['id'] ?></td>
-                                                <td><?= htmlspecialchars($user['username']) ?></td>
-                                                <td><?= htmlspecialchars($user['email']) ?></td>
-                                                <td>
-                                                    <span
-                                                        class="badge bg-<?= $user['role'] === 'admin' ? 'primary' : 'secondary' ?>">
-                                                        <?= ucfirst($user['role']) ?>
-                                                    </span>
-                                                </td>
-                                                <td><?= date('M j, Y', strtotime($user['created_at'])) ?></td>
-                                                <td class="action-buttons">
-                                                    <a href="view_user.php?id=<?= $user['id'] ?>" class="btn btn-sm btn-info"
-                                                        title="View">
-                                                        <i class="bi bi-eye"></i>
-                                                    </a>
-                                                    <a href="edit_user.php?id=<?= $user['id'] ?>" class="btn btn-sm btn-warning"
-                                                        title="Edit">
-                                                        <i class="bi bi-pencil"></i>
-                                                    </a>
-                                                    <a href="users.php?delete_id=<?= $user['id'] ?>"
-                                                        class="btn btn-sm btn-danger" title="Delete"
-                                                        onclick="return confirm('Are you sure you want to delete this user?')">
-                                                        <i class="bi bi-trash"></i>
-                                                    </a>
-                                                </td>
-                                            </tr>
-                                        <?php endforeach; ?>
-                                    <?php else: ?>
-                                        <tr>
-                                            <td colspan="6" class="text-center">No users found.</td>
-                                        </tr>
-                                    <?php endif; ?>
-                                </tbody>
-                            </table>
-                        </div>
+                        <form method="POST" action="">
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="username" class="form-label">Username</label>
+                                    <input type="text" class="form-control" id="username" name="username"
+                                        value="<?= isset($_POST['username']) ? htmlspecialchars($_POST['username']) : '' ?>"
+                                        required>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="email" class="form-label">Email</label>
+                                    <input type="email" class="form-control" id="email" name="email"
+                                        value="<?= isset($_POST['email']) ? htmlspecialchars($_POST['email']) : '' ?>"
+                                        required>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="password" class="form-label">Password</label>
+                                    <input type="password" class="form-control" id="password" name="password" required>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="confirm_password" class="form-label">Confirm Password</label>
+                                    <input type="password" class="form-control" id="confirm_password"
+                                        name="confirm_password" required>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="role" class="form-label">Role</label>
+                                    <select class="form-select" id="role" name="role" required>
+                                        <option value="user" <?= (isset($_POST['role']) && $_POST['role'] === 'user') ? 'selected' : '' ?>>User</option>
+                                        <option value="admin" <?= (isset($_POST['role']) && $_POST['role'] === 'admin') ? 'selected' : '' ?>>Admin</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Add User</button>
+                            <a href="users.php" class="btn btn-secondary">Cancel</a>
+                        </form>
                     </div>
                 </div>
             </div>
