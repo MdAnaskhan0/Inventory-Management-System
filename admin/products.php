@@ -204,6 +204,12 @@ $stmt->close();
                 gap: 10px;
             }
         }
+
+        @media screen and (min-width: 1200px) {
+            .main-content {
+                margin-left: 310px;
+            }
+        }
     </style>
 </head>
 

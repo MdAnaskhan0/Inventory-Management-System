@@ -158,6 +158,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 margin-left: 0;
             }
         }
+
+        @media screen and (min-width: 1200px) {
+            .main-content {
+                margin-left: 310px;
+            }
+        }
     </style>
 </head>
 

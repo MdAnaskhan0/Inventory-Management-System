@@ -208,6 +208,12 @@ if ($product['stock_quantity'] == 0) {
                 margin-right: 0;
             }
         }
+
+        @media screen and (min-width: 1200px) {
+            .main-content {
+                margin-left: 310px;
+            }
+        }
     </style>
 </head>
 

@@ -109,6 +109,15 @@ $stmt->close();
             color: var(--dark);
         }
 
+        .supplier-detail {
+            margin-bottom: 1rem;
+        }
+
+        .supplier-detail label {
+            font-weight: 500;
+            color: var(--secondary);
+        }
+
         @media (max-width: 768px) {
             .sidebar {
                 margin-left: -250px;
@@ -123,13 +132,11 @@ $stmt->close();
             }
         }
 
-        .supplier-detail {
-            margin-bottom: 1rem;
-        }
 
-        .supplier-detail label {
-            font-weight: 500;
-            color: var(--secondary);
+        @media screen and (min-width: 1200px) {
+            .main-content {
+                margin-left: 310px;
+            }
         }
     </style>
 </head>
@@ -222,7 +229,7 @@ $stmt->close();
                             <i class="bi bi-cart-check"></i> Orders
                         </a>
                     </li>
-                    
+
                     <li class="nav-item">
                         <a class="nav-link" href="reports.php">
                             <i class="bi bi-bar-chart"></i> Reports

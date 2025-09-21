@@ -184,6 +184,12 @@ if ($supplier_result && $supplier_result->num_rows > 0) {
                 margin-left: 0;
             }
         }
+
+        @media screen and (min-width: 1200px) {
+            .main-content {
+                margin-left: 310px;
+            }
+        }
     </style>
 </head>
 

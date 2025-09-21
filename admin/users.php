@@ -117,6 +117,11 @@ if ($result && $result->num_rows > 0) {
             font-weight: bold;
         }
 
+        .action-buttons .btn {
+            padding: 0.25rem 0.5rem;
+            font-size: 0.875rem;
+        }
+
         @media (max-width: 768px) {
             .sidebar {
                 margin-left: -250px;
@@ -131,9 +136,10 @@ if ($result && $result->num_rows > 0) {
             }
         }
 
-        .action-buttons .btn {
-            padding: 0.25rem 0.5rem;
-            font-size: 0.875rem;
+        @media screen and (min-width: 1200px) {
+            .main-content {
+                margin-left: 310px;
+            }
         }
     </style>
 </head>
@@ -153,7 +159,7 @@ if ($result && $result->num_rows > 0) {
                             <i class="bi bi-speedometer2"></i> Dashboard
                         </a>
                     </li>
-                    
+
                     <!-- Product -->
                     <li class="nav-item">
                         <a class="nav-link" data-bs-toggle="collapse" href="#productsSubmenu" role="button"
