@@ -8,38 +8,37 @@ if (!isset($_SESSION['username']) || $_SESSION['role'] !== 'admin') {
 // Include database configuration
 include '../db/config.php';
 
-// Get stats for dashboard
-$users_count = 0;
-$products_count = 0;
-$low_stock_count = 0;
-$recent_orders = 0;
+$error_msg = '';
+$success_msg = '';
 
-// Count users
-$result = $conn->query("SELECT COUNT(*) as count FROM users");
-if ($result) {
-    $users_count = $result->fetch_assoc()['count'];
-}
+// Handle form submission
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $name = trim($_POST['name']);
+    $contact_person = trim($_POST['contact_person']);
+    $email = trim($_POST['email']);
+    $phone = trim($_POST['phone']);
+    $address = trim($_POST['address']);
 
-// Count products
-$result = $conn->query("SELECT COUNT(*) as count FROM products");
-if ($result) {
-    $products_count = $result->fetch_assoc()['count'];
-}
+    // Validate inputs
+    if (empty($name)) {
+        $error_msg = "Supplier name is required.";
+    } else {
+        // Insert supplier
+        $insert_stmt = $conn->prepare("INSERT INTO suppliers (name, contact_person, email, phone, address) VALUES (?, ?, ?, ?, ?)");
+        $insert_stmt->bind_param("sssss", $name, $contact_person, $email, $phone, $address);
 
-// Count low stock products (assuming less than 10 items is low stock)
-$result = $conn->query("SELECT COUNT(*) as count FROM products WHERE stock_quantity < 10");
-if ($result) {
-    $low_stock_count = $result->fetch_assoc()['count'];
-}
+        if ($insert_stmt->execute()) {
+            $success_msg = "Supplier added successfully!";
+            // Clear form fields
+            $_POST = array();
+        } else {
+            $error_msg = "Error adding supplier: " . $conn->error;
+        }
 
-// Count recent orders (last 7 days)
-$result = $conn->query("SELECT COUNT(*) as count FROM orders WHERE order_date >= DATE_SUB(NOW(), INTERVAL 7 DAY)");
-if ($result) {
-    $recent_orders = $result->fetch_assoc()['count'];
+        $insert_stmt->close();
+    }
 }
 ?>
-
-
 
 <!DOCTYPE html>
 <html lang="en">
@@ -47,10 +46,11 @@ if ($result) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Dashboard - Inventory Management System</title>
+    <title>Add Supplier - Inventory Management System</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
     <style>
+        /* Same styles as suppliers.php */
         :root {
             --primary: #0d6efd;
             --secondary: #6c757d;
@@ -111,11 +111,6 @@ if ($result) {
             transform: translateY(-5px);
         }
 
-        .card-icon {
-            font-size: 2.5rem;
-            opacity: 0.8;
-        }
-
         .navbar-custom {
             background: white;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
@@ -124,11 +119,6 @@ if ($result) {
         .welcome-text {
             font-weight: 500;
             color: var(--dark);
-        }
-
-        .stats-number {
-            font-size: 1.8rem;
-            font-weight: bold;
         }
 
         @media (max-width: 768px) {
@@ -158,66 +148,28 @@ if ($result) {
                 </div>
                 <ul class="nav flex-column">
                     <li class="nav-item">
-                        <a class="nav-link active" href="admindashboard.php">
+                        <a class="nav-link" href="admindashboard.php">
                             <i class="bi bi-speedometer2"></i> Dashboard
                         </a>
                     </li>
-
-                    <!-- Product -->
                     <li class="nav-item">
-                        <a class="nav-link" data-bs-toggle="collapse" href="#productsSubmenu" role="button"
-                            aria-expanded="false">
-                            <i class="bi bi-box-seam"></i> Products <i class="bi bi-chevron-down ms-auto"></i>
-                        </a>
-                        <div class="collapse" id="productsSubmenu">
-                            <ul class="nav flex-column ms-3">
-                                <li class="nav-item">
-                                    <a class="nav-link" href="products.php">
-                                        <i class="bi bi-list"></i> View Products
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link active" href="add_product.php">
-                                        <i class="bi bi-plus-circle"></i> Add Product
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
-                    </li>
-
-                    <!-- Users -->
-                    <li class="nav-item">
-                        <a class="nav-link" data-bs-toggle="collapse" href="#usersSubmenu" role="button"
-                            aria-expanded="false">
-                            <i class="bi bi-people"></i> Users <i class="bi bi-chevron-down ms-auto"></i>
-                        </a>
-                        <div class="collapse" id="usersSubmenu">
-                            <ul class="nav flex-column ms-3">
-                                <li class="nav-item">
-                                    <a class="nav-link" href="users.php">
-                                        <i class="bi bi-people-fill"></i> View Users
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link active" href="add_user.php">
-                                        <i class="bi bi-person-fill-add"></i> Add Users
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
-                    </li>
-
-                    <!-- Suppliers -->
-                    <li class="nav-item">
-                        <a class="nav-link" href="suppliers.php">
-                            <i class="bi bi-cart-check"></i> Suppliers
+                        <a class="nav-link" href="products.php">
+                            <i class="bi bi-box-seam"></i> Products
                         </a>
                     </li>
-
-                    <!-- Orders -->
+                    <li class="nav-item">
+                        <a class="nav-link" href="users.php">
+                            <i class="bi bi-people"></i> Users
+                        </a>
+                    </li>
                     <li class="nav-item">
                         <a class="nav-link" href="orders.php">
                             <i class="bi bi-cart-check"></i> Orders
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="suppliers.php">
+                            <i class="bi bi-truck"></i> Suppliers
                         </a>
                     </li>
                     <li class="nav-item">
@@ -271,63 +223,67 @@ if ($result) {
                     </div>
                 </nav>
 
-                <!-- Dashboard Stats -->
+                <!-- Add Supplier Form -->
                 <div class="row mb-4">
-                    <div class="col-md-3 mb-3">
-                        <div class="card dashboard-card bg-primary text-white">
-                            <div class="card-body">
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <div>
-                                        <h6 class="card-title">TOTAL USERS</h6>
-                                        <h2 class="stats-number"><?= $users_count ?></h2>
-                                    </div>
-                                    <i class="bi bi-people card-icon"></i>
-                                </div>
-                                <a href="users.php" class="text-white small stretched-link">View Details</a>
-                            </div>
+                    <div class="col-12">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <h2>Add New Supplier</h2>
+                            <a href="suppliers.php" class="btn btn-secondary">
+                                <i class="bi bi-arrow-left"></i> Back to Suppliers
+                            </a>
                         </div>
                     </div>
-                    <div class="col-md-3 mb-3">
-                        <div class="card dashboard-card bg-success text-white">
-                            <div class="card-body">
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <div>
-                                        <h6 class="card-title">TOTAL PRODUCTS</h6>
-                                        <h2 class="stats-number"><?= $products_count ?></h2>
-                                    </div>
-                                    <i class="bi bi-box-seam card-icon"></i>
-                                </div>
-                                <a href="products.php" class="text-white small stretched-link">View Details</a>
-                            </div>
-                        </div>
+                </div>
+
+                <!-- Alert Messages -->
+                <?php if (!empty($error_msg)): ?>
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        <?= $error_msg ?>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                     </div>
-                    <div class="col-md-3 mb-3">
-                        <div class="card dashboard-card bg-warning text-dark">
-                            <div class="card-body">
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <div>
-                                        <h6 class="card-title">LOW STOCK</h6>
-                                        <h2 class="stats-number"><?= $low_stock_count ?></h2>
-                                    </div>
-                                    <i class="bi bi-exclamation-triangle card-icon"></i>
-                                </div>
-                                <a href="#" class="text-dark small stretched-link">View Details</a>
-                            </div>
-                        </div>
+                <?php endif; ?>
+
+                <?php if (!empty($success_msg)): ?>
+                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                        <?= $success_msg ?>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                     </div>
-                    <div class="col-md-3 mb-3">
-                        <div class="card dashboard-card bg-info text-white">
-                            <div class="card-body">
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <div>
-                                        <h6 class="card-title">RECENT ORDERS</h6>
-                                        <h2 class="stats-number"><?= $recent_orders ?></h2>
-                                    </div>
-                                    <i class="bi bi-cart-check card-icon"></i>
+                <?php endif; ?>
+
+                <div class="card dashboard-card">
+                    <div class="card-body">
+                        <form method="POST" action="">
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="name" class="form-label">Supplier Name *</label>
+                                    <input type="text" class="form-control" id="name" name="name"
+                                        value="<?= isset($_POST['name']) ? htmlspecialchars($_POST['name']) : '' ?>"
+                                        required>
                                 </div>
-                                <a href="orders.php" class="text-white small stretched-link">View Details</a>
+                                <div class="col-md-6 mb-3">
+                                    <label for="contact_person" class="form-label">Contact Person</label>
+                                    <input type="text" class="form-control" id="contact_person" name="contact_person"
+                                        value="<?= isset($_POST['contact_person']) ? htmlspecialchars($_POST['contact_person']) : '' ?>">
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="email" class="form-label">Email</label>
+                                    <input type="email" class="form-control" id="email" name="email"
+                                        value="<?= isset($_POST['email']) ? htmlspecialchars($_POST['email']) : '' ?>">
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="phone" class="form-label">Phone</label>
+                                    <input type="tel" class="form-control" id="phone" name="phone"
+                                        value="<?= isset($_POST['phone']) ? htmlspecialchars($_POST['phone']) : '' ?>">
+                                </div>
+                                <div class="col-12 mb-3">
+                                    <label for="address" class="form-label">Address</label>
+                                    <textarea class="form-control" id="address" name="address"
+                                        rows="3"><?= isset($_POST['address']) ? htmlspecialchars($_POST['address']) : '' ?></textarea>
+                                </div>
                             </div>
-                        </div>
+                            <button type="submit" class="btn btn-primary">Add Supplier</button>
+                            <a href="suppliers.php" class="btn btn-secondary">Cancel</a>
+                        </form>
                     </div>
                 </div>
             </div>

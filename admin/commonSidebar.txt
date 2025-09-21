@@ -162,59 +162,16 @@ if ($result) {
                             <i class="bi bi-speedometer2"></i> Dashboard
                         </a>
                     </li>
-
-                    <!-- Product -->
                     <li class="nav-item">
-                        <a class="nav-link" data-bs-toggle="collapse" href="#productsSubmenu" role="button"
-                            aria-expanded="false">
-                            <i class="bi bi-box-seam"></i> Products <i class="bi bi-chevron-down ms-auto"></i>
-                        </a>
-                        <div class="collapse" id="productsSubmenu">
-                            <ul class="nav flex-column ms-3">
-                                <li class="nav-item">
-                                    <a class="nav-link" href="products.php">
-                                        <i class="bi bi-list"></i> View Products
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link active" href="add_product.php">
-                                        <i class="bi bi-plus-circle"></i> Add Product
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
-                    </li>
-
-                    <!-- Users -->
-                    <li class="nav-item">
-                        <a class="nav-link" data-bs-toggle="collapse" href="#usersSubmenu" role="button"
-                            aria-expanded="false">
-                            <i class="bi bi-people"></i> Users <i class="bi bi-chevron-down ms-auto"></i>
-                        </a>
-                        <div class="collapse" id="usersSubmenu">
-                            <ul class="nav flex-column ms-3">
-                                <li class="nav-item">
-                                    <a class="nav-link" href="users.php">
-                                        <i class="bi bi-people-fill"></i> View Users
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link active" href="add_user.php">
-                                        <i class="bi bi-person-fill-add"></i> Add Users
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
-                    </li>
-
-                    <!-- Suppliers -->
-                    <li class="nav-item">
-                        <a class="nav-link" href="suppliers.php">
-                            <i class="bi bi-cart-check"></i> Suppliers
+                        <a class="nav-link" href="products.php">
+                            <i class="bi bi-box-seam"></i> Products
                         </a>
                     </li>
-
-                    <!-- Orders -->
+                    <li class="nav-item">
+                        <a class="nav-link" href="users.php">
+                            <i class="bi bi-people"></i> Users
+                        </a>
+                    </li>
                     <li class="nav-item">
                         <a class="nav-link" href="orders.php">
                             <i class="bi bi-cart-check"></i> Orders
@@ -271,65 +228,12 @@ if ($result) {
                     </div>
                 </nav>
 
-                <!-- Dashboard Stats -->
-                <div class="row mb-4">
-                    <div class="col-md-3 mb-3">
-                        <div class="card dashboard-card bg-primary text-white">
-                            <div class="card-body">
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <div>
-                                        <h6 class="card-title">TOTAL USERS</h6>
-                                        <h2 class="stats-number"><?= $users_count ?></h2>
-                                    </div>
-                                    <i class="bi bi-people card-icon"></i>
-                                </div>
-                                <a href="users.php" class="text-white small stretched-link">View Details</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-3 mb-3">
-                        <div class="card dashboard-card bg-success text-white">
-                            <div class="card-body">
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <div>
-                                        <h6 class="card-title">TOTAL PRODUCTS</h6>
-                                        <h2 class="stats-number"><?= $products_count ?></h2>
-                                    </div>
-                                    <i class="bi bi-box-seam card-icon"></i>
-                                </div>
-                                <a href="products.php" class="text-white small stretched-link">View Details</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-3 mb-3">
-                        <div class="card dashboard-card bg-warning text-dark">
-                            <div class="card-body">
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <div>
-                                        <h6 class="card-title">LOW STOCK</h6>
-                                        <h2 class="stats-number"><?= $low_stock_count ?></h2>
-                                    </div>
-                                    <i class="bi bi-exclamation-triangle card-icon"></i>
-                                </div>
-                                <a href="#" class="text-dark small stretched-link">View Details</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-3 mb-3">
-                        <div class="card dashboard-card bg-info text-white">
-                            <div class="card-body">
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <div>
-                                        <h6 class="card-title">RECENT ORDERS</h6>
-                                        <h2 class="stats-number"><?= $recent_orders ?></h2>
-                                    </div>
-                                    <i class="bi bi-cart-check card-icon"></i>
-                                </div>
-                                <a href="orders.php" class="text-white small stretched-link">View Details</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                <!-- Products Page Stats -->
+                <p>CURD Orders action</p>
+
+
+
+
             </div>
         </div>
     </div>
