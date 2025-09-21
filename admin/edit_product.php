@@ -252,21 +252,29 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             <i class="bi bi-speedometer2"></i> Dashboard
                         </a>
                     </li>
+                    <!-- Product -->
                     <li class="nav-item">
-                        <a class="nav-link" href="products.php">
-                            <i class="bi bi-box-seam"></i> Products
+                        <a class="nav-link" data-bs-toggle="collapse" href="#productsSubmenu" role="button"
+                            aria-expanded="false">
+                            <i class="bi bi-box-seam"></i> Products <i class="bi bi-chevron-down ms-auto"></i>
                         </a>
+                        <div class="collapse" id="productsSubmenu">
+                            <ul class="nav flex-column ms-3">
+                                <li class="nav-item">
+                                    <a class="nav-link" href="products.php">
+                                        <i class="bi bi-list"></i> View Products
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link active" href="add_product.php">
+                                        <i class="bi bi-plus-circle"></i> Add Product
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="add_product.php">
-                            <i class="bi bi-plus-circle"></i> Add Product
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link active" href="#">
-                            <i class="bi bi-pencil"></i> Edit Product
-                        </a>
-                    </li>
+
+                    <!-- Users -->
                     <li class="nav-item">
                         <a class="nav-link" href="users.php">
                             <i class="bi bi-people"></i> Users
