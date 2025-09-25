@@ -12,16 +12,23 @@
 body {
     background-color: #f5f7fb;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    height: 100%;
+    margin: 0;
+    display: flex;
+    flex-direction: column
 }
 
 .sidebar {
     background: var(--dark);
     color: white;
-    height: 100vh;
-    position: fixed;
+    height: 100%;
+    min-height: 100vh;
+    position: relative;
     padding-top: 20px;
     transition: all 0.3s;
+    overflow-y: auto;
 }
+
 
 .sidebar .nav-link {
     color: rgba(255, 255, 255, 0.8);
@@ -45,6 +52,8 @@ body {
     margin-left: 230px;
     padding: 20px;
     transition: all 0.3s;
+    flex: 1;
+    padding: 20px;
 }
 
 .dashboard-card {
@@ -72,6 +81,10 @@ body {
 .stats-number {
     font-size: 1.8rem;
     font-weight: bold;
+}
+
+footer {
+    margin-top: auto;
 }
 
 @media (max-width: 768px) {

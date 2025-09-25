@@ -65,8 +65,11 @@ if ($result) {
                 <?php include '../assect/navbar/navbar.php'; ?>
 
                 <!-- Page Stats -->
-                
+
             </div>
+
+            <!-- Include Footer -->
+            <?php include '../assect/footer/footer.php'; ?>
         </div>
     </div>
 
