@@ -3,7 +3,9 @@
         <h4>Inventory System</h4>
         <hr class="bg-light">
     </div>
-    <ul class="nav flex-column">
+
+    <ul class="nav flex-column" id="sidebarMenu">
+        <!-- Dashboard -->
         <li class="nav-item">
             <a class="nav-link active" href="admindashboard.php">
                 <i class="bi bi-speedometer2"></i> Dashboard
@@ -15,7 +17,7 @@
             <a class="nav-link" data-bs-toggle="collapse" href="#customersSubmenu" role="button" aria-expanded="false">
                 <i class="bi bi-people"></i> Customers <i class="bi bi-chevron-down ms-auto"></i>
             </a>
-            <div class="collapse" id="customersSubmenu">
+            <div class="collapse" id="customersSubmenu" data-bs-parent="#sidebarMenu">
                 <ul class="nav flex-column ms-3">
                     <li class="nav-item">
                         <a class="nav-link" href="customers.php">
@@ -31,12 +33,12 @@
             </div>
         </li>
 
-        <!-- Product -->
+        <!-- Products -->
         <li class="nav-item">
             <a class="nav-link" data-bs-toggle="collapse" href="#productsSubmenu" role="button" aria-expanded="false">
                 <i class="bi bi-box-seam"></i> Products <i class="bi bi-chevron-down ms-auto"></i>
             </a>
-            <div class="collapse" id="productsSubmenu">
+            <div class="collapse" id="productsSubmenu" data-bs-parent="#sidebarMenu">
                 <ul class="nav flex-column ms-3">
                     <li class="nav-item">
                         <a class="nav-link" href="products.php">
@@ -57,7 +59,7 @@
             <a class="nav-link" data-bs-toggle="collapse" href="#usersSubmenu" role="button" aria-expanded="false">
                 <i class="bi bi-people"></i> Users <i class="bi bi-chevron-down ms-auto"></i>
             </a>
-            <div class="collapse" id="usersSubmenu">
+            <div class="collapse" id="usersSubmenu" data-bs-parent="#sidebarMenu">
                 <ul class="nav flex-column ms-3">
                     <li class="nav-item">
                         <a class="nav-link" href="users.php">
@@ -78,7 +80,7 @@
             <a class="nav-link" data-bs-toggle="collapse" href="#suppliersSubmenu" role="button" aria-expanded="false">
                 <i class="bi bi-building"></i> Suppliers <i class="bi bi-chevron-down ms-auto"></i>
             </a>
-            <div class="collapse" id="suppliersSubmenu">
+            <div class="collapse" id="suppliersSubmenu" data-bs-parent="#sidebarMenu">
                 <ul class="nav flex-column ms-3">
                     <li class="nav-item">
                         <a class="nav-link" href="suppliers.php">
@@ -94,13 +96,12 @@
             </div>
         </li>
 
-
         <!-- Orders -->
         <li class="nav-item">
             <a class="nav-link" data-bs-toggle="collapse" href="#ordersSubmenu" role="button" aria-expanded="false">
                 <i class="bi bi-cart-check"></i> Orders <i class="bi bi-chevron-down ms-auto"></i>
             </a>
-            <div class="collapse" id="ordersSubmenu">
+            <div class="collapse" id="ordersSubmenu" data-bs-parent="#sidebarMenu">
                 <ul class="nav flex-column ms-3">
                     <li class="nav-item">
                         <a class="nav-link" href="orders.php">
@@ -127,11 +128,15 @@
                 <i class="bi bi-bar-chart"></i> Reports
             </a>
         </li>
+
+        <!-- Settings -->
         <li class="nav-item">
             <a class="nav-link" href="settings.php">
                 <i class="bi bi-gear"></i> Settings
             </a>
         </li>
+
+        <!-- Logout -->
         <li class="nav-item mt-4">
             <a class="nav-link text-danger" href="../logout.php">
                 <i class="bi bi-box-arrow-right"></i> Logout

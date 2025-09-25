@@ -13,7 +13,8 @@
                     <i class="bi bi-person-circle me-1"></i> My Account
                 </button>
                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
-                    <li><a class="dropdown-item" href="#"><i class="bi bi-person me-2"></i>Profile</a>
+                    <li><a class="dropdown-item" href="../admin/adminprofile.php"><i
+                                class="bi bi-person me-2"></i>Profile</a>
                     </li>
                     <li><a class="dropdown-item" href="#"><i class="bi bi-gear me-2"></i>Settings</a>
                     </li>

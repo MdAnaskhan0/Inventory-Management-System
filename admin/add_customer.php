@@ -77,7 +77,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <?php include '../assect/navbar/navbar.php'; ?>
 
                 <!-- Add Customer Form -->
-                <div class="card dashboard-card">
+                <div class="card dashboard-card" style="min-height: 100vh">
                     <div class="card-header">
                         <h5 class="mb-0"><i class="bi bi-person-plus me-2"></i>Add New Customer</h5>
                     </div>
@@ -138,6 +138,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     </div>
                 </div>
             </div>
+
+            <!-- Include Footer -->
+            <?php include '../assect/footer/footer.php'; ?>
         </div>
     </div>
 

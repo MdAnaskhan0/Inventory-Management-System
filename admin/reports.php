@@ -367,7 +367,7 @@ if (isset($_GET['quick_report'])) {
                 <?php include '../assect/navbar/navbar.php'; ?>
 
                 <!-- Reports Dashboard -->
-                <div class="card dashboard-card">
+                <div class="card dashboard-card mb-4">
                     <div class="card-header">
                         <h5 class="mb-0"><i class="bi bi-bar-chart me-2"></i>Reports & Analytics</h5>
                     </div>
@@ -639,6 +639,9 @@ if (isset($_GET['quick_report'])) {
                     </div>
                 </div>
             </div>
+
+            <!-- Include Footer -->
+            <?php include '../assect/footer/footer.php'; ?>
         </div>
     </div>
 
